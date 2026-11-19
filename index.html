@@ -16,9 +16,10 @@
       --muted: #64748B;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "IBM Plex Sans Thai", "Noto Sans Thai", sans-serif; }
-    body { background: linear-gradient(135deg, #FFF5F5, #FEE2E2); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; gap: 12px; }
-    .phone { width: 100%; max-width: 420px; height: 760px; background: var(--canvas); border-radius: 18px; border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 12px 32px rgba(153, 27, 27, 0.12); }
-    @media (max-width: 480px) { body { padding: 0; gap: 0; } .phone { max-width: 100%; border-radius: 0; border: none; height: 100dvh; box-shadow: none; } }
+    html, body { height: 100%; }
+    body { background: var(--canvas); color: var(--ink); min-height: 100dvh; display: flex; flex-direction: column; align-items: center; }
+    .brand-dot { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #fff; border: 1px solid #FEE2E2; }
+    .phone { width: 100%; max-width: 640px; height: 100dvh; background: var(--canvas); overflow: hidden; display: flex; flex-direction: column; position: relative; }
     .shop-box { background: #fff; border: 1px solid #FECACA; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 22px rgba(215,25,32,.08); }
     .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .shop-item { border: 1px solid #FEE2E2; background: #FFF8F8; border-radius: 14px; padding: 6px 6px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-family: inherit; }
@@ -198,7 +199,7 @@
       persona: 'policyholder',
       mid: 'U4c8819e7b22a4f09d11e7730',
       userName: 'คุณสมศรี',
-      screen: 'line-oa',
+      screen: 'pa-home',
       category: 'pa',
       mode: 'self',
       selectedPlanId: 'pa-smart',
@@ -218,14 +219,14 @@
 
     function switchPersona(type) {
       if (type === 'guest') {
-        state = { ...state, persona: 'guest', mid: 'U9a4f82d1c07b5e3109a2f418', userName: 'ผู้เยี่ยมชม', screen: 'line-oa', category: 'pa', mode: 'self', jPoints: 0, claimed500: false, policies: [], chatReply: 'ซื้อได้ทั้ง PA (รุ่นใหญ่ / SMART PA / More Fun) ประกันโดรน ≤25 กก. บ้าน ร้านค้า กอล์ฟ พร้อมรับฟรี 500 J Point!', modal: null, couponConfirm: null };
+        state = { ...state, persona: 'guest', mid: 'U9a4f82d1c07b5e3109a2f418', userName: 'ผู้เยี่ยมชม', screen: 'pa-home', category: 'pa', mode: 'self', jPoints: 0, claimed500: false, policies: [], chatReply: 'ซื้อได้ทั้ง PA (รุ่นใหญ่ / SMART PA / More Fun) ประกันโดรน ≤25 กก. บ้าน ร้านค้า กอล์ฟ พร้อมรับฟรี 500 J Point!', modal: null, couponConfirm: null };
       } else {
         state = {
           ...state,
           persona: 'policyholder',
           mid: 'U4c8819e7b22a4f09d11e7730',
           userName: 'คุณสมศรี',
-          screen: 'line-oa',
+          screen: 'pa-home',
           category: 'pa',
           mode: 'self',
           jPoints: 120,
@@ -360,83 +361,7 @@
       const vp = document.getElementById('viewport');
       const nav = document.getElementById('bottom-nav');
 
-      if (state.screen === 'line-oa') {
-        nav.style.display = 'none';
-        vp.innerHTML = `
-          <div class="line-bg">
-            <div>
-              <div class="line-header">
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <span style="color:#334155;display:inline-flex;">${ICONS.back}</span>
-                  <div>
-                    <div style="font-size:14px;font-weight:800;color:#0F172A;line-height:1.2;">Jaymart Insurance</div>
-                    <div style="font-size:10px;color:#64748B;">ผู้รับผิดชอบเป็นผู้ตอบกลับ · 02-099-0555</div>
-                  </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;color:#334155;">
-                  ${ICONS.search}
-                  ${ICONS.menu}
-                </div>
-              </div>
-              <div class="chat-area">
-                <div class="bubble-user">ใครซื้อได้ / ซื้อได้กี่ฉบับ</div>
-                <div style="display:flex;align-items:flex-start;gap:8px;">
-                  <img src="${ASSETS.jaymartLogo}" alt="Jaymart" style="width:28px;height:28px;border-radius:99px;object-fit:cover;background:#fff;flex-shrink:0;" />
-                  <div class="bubble-bot">${state.chatReply}</div>
-                </div>
-                <div class="bubble-bot" style="border:1px solid #FECACA;background:#FFF5F5;margin-left:36px;">
-                  <strong>สิทธิพิเศษผ่านลิงก์ LINE@:</strong><br/>• เชื่อม J Point แรกรับ <strong>+500 คะแนน</strong><br/>• ซื้อ PA / โดรน / Non-Motor <strong>ลด 20% + คะแนน x3</strong>
-                </div>
-                <div class="quick-pills">
-                  <button class="quick-pill" onclick="state.chatReply='อายุ 15–100 ปี ต้องเป็นบุคคลสัญชาติไทยที่อาศัยอยู่ในประเทศไทย · ซื้อได้คนละ 1 ฉบับ (พร้อมรับฟรี 500 J Point)';render()">คำถามที่พบบ่อย</button>
-                  <button class="quick-pill" onclick="go(state.persona==='policyholder'?'policies':'pa-home')">เช็คกรมธรรม์</button>
-                  <button class="quick-pill" onclick="go('jpoint')">รับฟรี 500 J Point</button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="rich-strip">มีคำถามหรือต้องการซื้อประกัน? กดเลือกได้เลย</div>
-              <div class="rich-menu">
-                <div class="rich-tile" onclick="go('jpoint')">
-                  <div class="rich-icon" style="background:linear-gradient(135deg,#E11D48,#D71920);">${ICONS.userPlus}</div>
-                  <b>เชื่อม J Point</b>
-                  <span>รับฟรี 500 คะแนน</span>
-                </div>
-                <div class="rich-tile" onclick="go(state.persona==='policyholder'?'policies':'pa-home')">
-                  <div class="rich-icon" style="background:linear-gradient(135deg,#334155,#0F172A);">${ICONS.fileCheck}</div>
-                  <b>เช็คกรมธรรม์</b>
-                  <span>ดูกรมธรรม์ของคุณ</span>
-                </div>
-                <div class="rich-tile highlight" onclick="go('pa-home','self','pa')">
-                  <div class="rich-icon" style="background:rgba(255,255,255,0.25);box-shadow:none;">${ICONS.gift}</div>
-                  <b>ซื้อประกันภัย</b>
-                  <span>PA · โดรน · +500 JP</span>
-                  <div class="rich-buy-pill">ซื้อเลย &gt;</div>
-                </div>
-                <div class="rich-tile" onclick="go('pa-plans','self','drone')">
-                  <div class="rich-icon" style="background:linear-gradient(135deg,#D81B60,#991B1B);">${ICONS.bot}</div>
-                  <b>ประกันโดรน</b>
-                  <span>ลด 20% เริ่ม ฿778</span>
-                </div>
-                <div class="rich-tile" onclick="go('pa-plans','self','other')">
-                  <div class="rich-icon" style="background:linear-gradient(135deg,#F59E0B,#D71920);">${ICONS.help}</div>
-                  <b>Non-Motor อื่นๆ</b>
-                  <span>บ้าน · SME · กอล์ฟ</span>
-                </div>
-                <div class="rich-tile" onclick="go('pa-plans','family','pa')">
-                  <div class="rich-icon" style="background:linear-gradient(135deg,#991B1B,#D81B60);">${ICONS.headset}</div>
-                  <b>ซื้อให้ครอบครัว</b>
-                  <span>แอดมิน 08:30–17:30</span>
-                </div>
-              </div>
-              <div class="line-footer">
-                <span style="color:#64748B;display:inline-flex;">${ICONS.keyboard}</span>
-                <span>เมนู ▾</span>
-                <span style="width:16px;"></span>
-              </div>
-            </div>
-          </div>`;
-      } else {
+      {
         nav.style.display = 'grid';
         nav.innerHTML = `
           <button class="nav-btn ${state.screen==='pa-home'?'active':''}" onclick="go('pa-home')">${ICONS.navHome}<span>หน้าหลัก</span></button>
@@ -450,7 +375,7 @@
         const userArea = state.persona === 'guest'
           ? '<button class="btn-line" onclick="askLogin(null)">' + LINE_ICON + 'เข้าสู่ระบบ</button>'
           : '<button class="user-chip" onclick="state.logoutAsk=true;render()"><span class="avatar">' + state.userName.replace('คุณ', '').charAt(0) + '</span>' + state.userName + ' <span style="color:#94A3B8;font-size:10px;">▾</span></button>';
-        const liffTop = '<div class="liff-bar"><div style="display:flex;align-items:center;gap:8px;"><button class="icon-back" onclick="go(\'line-oa\')" aria-label="กลับไปแชท">' + ICONS.back + '</button><div><h1>Jaymart Insurance</h1><div class="liff-sub">ประกันภัยออนไลน์ผ่าน LINE</div></div></div>' + userArea + '</div>';
+        const liffTop = '<div class="liff-bar"><div style="display:flex;align-items:center;gap:8px;">' + (state.screen === 'pa-home' ? '<img src="' + ASSETS.jaymartLogo + '" alt="" class="brand-dot" />' : '<button class="icon-back" onclick="go(\'pa-home\')" aria-label="กลับหน้าหลัก">' + ICONS.back + '</button>') + '<div><h1>Jaymart Insurance</h1><div class="liff-sub">ประกันภัยออนไลน์ผ่าน LINE</div></div></div>' + userArea + '</div>';
 
         if (state.screen === 'pa-home') {
           const policyStrip = state.persona !== 'guest' && state.policies.length > 0 ? `
