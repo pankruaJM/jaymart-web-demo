@@ -39,6 +39,37 @@
     .fam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .txt { width: 100%; border: 1px solid #F1F5F9; background: #F8FAFC; border-radius: 12px; padding: 9px 12px; font-size: 13px; font-family: inherit; }
     .buy-bar { position: sticky; bottom: 8px; z-index: 5; box-shadow: 0 8px 20px rgba(215,25,32,.3); }
+    .svc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .svc { background: #fff; border: 1px solid #FEE2E2; border-radius: 14px; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700; color: #1C1B1E; text-decoration: none; text-align: center; cursor: pointer; font-family: inherit; line-height: 1.25; }
+    .svc-ic { width: 40px; height: 40px; border-radius: 12px; background: #FFF1F2; color: #D71920; display: flex; align-items: center; justify-content: center; }
+    .hotline { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg,#E11D48,#D71920); color: #fff; border-radius: 14px; padding: 12px 14px; text-decoration: none; }
+    .hotline span { display: flex; flex-direction: column; } .hotline b { font-size: 15px; } .hotline small { font-size: 11px; opacity: .9; }
+    .claim-link { display: flex; justify-content: space-between; padding: 10px 2px; border-bottom: 1px solid #F1F5F9; color: #1C1B1E; text-decoration: none; font-size: 13px; font-weight: 600; text-align: left; }
+    .claim-link span { color: #D71920; }
+    .foot { font-size: 10.5px; color: #64748B; line-height: 1.7; padding: 6px 4px 14px; display: grid; gap: 2px; }
+    .foot strong { color: #1C1B1E; font-size: 12px; } .foot a { color: #D71920; text-decoration: none; }
+    .foot-links { display: flex; flex-wrap: wrap; gap: 4px 12px; font-weight: 700; margin: 4px 0; }
+    .consent-row { display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px; color: #475569; margin-top: 8px; line-height: 1.5; }
+    .consent-row input { margin-top: 3px; accent-color: #D71920; } .consent-row a { color: #D71920; }
+    .plan-list { display: flex; flex-direction: column; gap: 14px; }
+    /* คอมพิวเตอร์ / แท็บเล็ต: ขยายตัวอักษรและจัดหลายคอลัมน์ */
+    @media (min-width: 900px) {
+      .phone { max-width: none; zoom: 1.15; height: calc(100dvh / 1.15); }
+      .content { padding: 20px 40px 96px; gap: 18px; }
+      .liff-bar { padding: 10px 40px; }
+      .reward-card img { max-height: 120px; object-fit: cover; }
+      .grid-2.rewards, .content > .grid-2 { grid-template-columns: repeat(4, 1fr); }
+      .plan-top { margin: -20px -40px 0; padding: 14px 40px 12px; gap: 12px; }
+      .plan-top .prod-banner { max-height: 200px; }
+      .shop-grid { grid-template-columns: repeat(9, 1fr); gap: 10px; }
+      .grid-2 { grid-template-columns: repeat(4, 1fr); }
+      .plan-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      .buy-bar { max-width: 560px; margin: 0 auto; width: 100%; }
+      .modal-box { max-width: 440px; }
+    }
+    .plan-top { display: flex; flex-direction: column; gap: 10px; position: sticky; top: var(--hdr, 54px); z-index: 15; background: var(--canvas); margin: -14px -14px 0; padding: 10px 14px 10px; box-shadow: 0 10px 18px -14px rgba(215,25,32,.35); }
+    .plan-top .prod-banner { max-height: 130px; }
+    .viewport .sky-hero { position: sticky; top: var(--hdr, 54px); z-index: 15; }
     .viewport { flex: 1; overflow-y: auto; position: relative; }
     .liff-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 9px 14px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
     .liff-bar h1 { font-size: 15px; font-weight: 800; color: #1C1B1E; }
@@ -168,6 +199,18 @@
       { id: 'drone-std-2', name: 'โดรนทั่วไป Option 2', sub: 'สู้คดี 150k + ประกันตัวผู้บังคับ 100k', base: 1321, price: 1057, cov: '1,000,000', med: '150,000', pts: 120 }
     ];
 
+    const SITE = 'https://www.jaymartinsurance.co.th';
+    const CLAIMS = [
+      { name: 'ประกันอุบัติเหตุ (PA)', c: 83 }, { name: 'ประกันโดรน', c: 124 },
+      { name: 'อัคคีภัย / บ้าน / ร้านค้า', c: 122 }, { name: 'ขนส่ง (ผู้ขนส่ง)', c: 123 },
+      { name: 'ความรับผิดต่อบุคคลภายนอก (กอล์ฟ / ผู้ตรวจสอบอาคาร)', c: 126 }, { name: 'สินไหมอื่นๆ', c: 127 }
+    ];
+    const SVC_ICON = {
+      claim: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
+      check: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>',
+      hosp: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M12 9v6M9 12h6"/></svg>',
+      plane: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>'
+    };
     const HOME_PRODUCTS = [
       { p: 'pa-senior', name: 'PA รุ่นใหญ่', img: 'tPaSenior', from: '฿280', per: '/6 เดือน' },
       { p: 'pa-smart-1', name: 'SMART PA', img: 'tPaSmart', from: '฿440', per: '/ปี' },
@@ -327,6 +370,7 @@
         const fn = (state.famFirst || '').trim(), ln = (state.famLast || '').trim(), id = state.famId || '';
         if (!fn || !ln) { state.modal = { title: 'กรอกชื่อและนามสกุล', desc: 'ใส่ชื่อและนามสกุลของ' + state.familyRelation + 'ก่อนซื้อค่ะ' }; render(); return; }
         if (!id) { state.modal = { title: 'กรอกเลขบัตรประชาชน', desc: 'ใส่เลขบัตรประชาชนของ' + state.familyRelation + 'ก่อนซื้อค่ะ' }; render(); return; }
+        if (!state.famConsent) { state.modal = { title: 'กรุณายืนยันความยินยอม', desc: 'ติ๊กยืนยันว่าได้รับความยินยอมจากผู้เอาประกัน และยอมรับนโยบายข้อมูลส่วนบุคคลก่อนค่ะ' }; render(); return; }
         // เดโม: ยังไม่ตรวจความถูกต้องของเลขบัตร (มีฟังก์ชัน validThaiId ไว้ใช้ภายหลัง)
         state.familyName = fn + ' ' + ln;
       }
@@ -356,7 +400,9 @@
       if (id.startsWith('drone')) return 'bDrone';
       return { 'other-home': 'bHome', 'other-sme': 'bSme', 'other-golf': 'bGolf', 'other-inspector': 'bInspector', 'other-inspector-corp': 'bInspector', 'other-carrier': 'bCarrier' }[id] || null;
     }
+    function syncHeader() { const h = document.querySelector('.liff-bar'); if (h) document.documentElement.style.setProperty('--hdr', h.offsetHeight + 'px'); }
     function render() {
+      requestAnimationFrame(syncHeader);
 
       const vp = document.getElementById('viewport');
       const nav = document.getElementById('bottom-nav');
@@ -450,11 +496,21 @@
                 </div>
                 <span style="background:#FACC15;color:#0F172A;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:800;flex-shrink:0;">${state.claimed500?'รับแล้ว':'รับ 500'}</span>
               </div>
+              <div class="svc-grid">
+                <button class="svc" onclick="state.claimAsk=true;render()"><span class="svc-ic">${SVC_ICON.claim}</span>แจ้งเคลม 24 ชม.</button>
+                <a class="svc" target="_blank" rel="noopener" href="${SITE}/page/check-policy/"><span class="svc-ic">${SVC_ICON.check}</span>ตรวจสอบกรมธรรม์</a>
+                <a class="svc" target="_blank" rel="noopener" href="https://www.blueventuretpa.com/page/our-network"><span class="svc-ic">${SVC_ICON.hosp}</span>โรงพยาบาลในเครือ</a>
+                <a class="svc" target="_blank" rel="noopener" href="${SITE}/page/content-detail/?content=81"><span class="svc-ic">${SVC_ICON.plane}</span>ประกันเดินทาง</a>
+              </div>
               <strong style="font-size:13px;">ของรางวัล J Point &amp; Casa Lapin</strong>
               <div class="grid-2">${rewardsHtml}</div>
-              <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;">
-                <div><strong>บริษัท เจมาร์ท ประกันภัย จำกัด (มหาชน)</strong><div style="font-size:10px;color:#64748B;">โทร. 02-099-0555 · แอดมิน 08:30–17:30 น.</div></div>
-                <span style="color:#D71920;font-weight:800;white-space:nowrap;">FB: Jaymart</span>
+              <div class="foot">
+                <strong>บริษัท เจมาร์ท ประกันภัย จำกัด (มหาชน)</strong>
+                <div>195/1 อาคาร JMT Office รามคำแหง ชั้น 5 ถนนรามคำแหง แขวงราษฎร์พัฒนา เขตสะพานสูง กรุงเทพฯ 10240</div>
+                <div>โทร <a href="tel:020990555">02-099-0555</a> (จ.–ศ. 08:30–17:00) · แจ้งอุบัติเหตุ 24 ชม. กด 1</div>
+                <div>อีเมล <a href="mailto:Marketinginno@jaymartinsurance.co.th">Marketinginno@jaymartinsurance.co.th</a></div>
+                <div class="foot-links"><a target="_blank" rel="noopener" href="https://www.facebook.com/JaymartInsure">Facebook</a><a target="_blank" rel="noopener" href="${SITE}/page/policy/">นโยบายข้อมูลส่วนบุคคล</a><a target="_blank" rel="noopener" href="${SITE}/page/contact-us/">ติดต่อ / ร้องเรียน</a><a target="_blank" rel="noopener" href="http://www.oic.or.th/th/home">สำนักงาน คปภ.</a></div>
+                <div style="color:#94A3B8;">เลขทะเบียนบริษัท 0107556000060 · © 2026 Jaymart Insurance</div>
               </div>
             </div>`;
         } else if (state.screen === 'pa-plans') {
@@ -496,18 +552,18 @@
               : cur ? `<div class="mode-info">แผนปัจจุบัน: <strong>${cur.planName}</strong> · คุ้มครอง ฿${cur.cov}</div>`
               : `<div class="mode-info">ยังไม่มีกรมธรรม์ PA</div>`;
           } else if (state.category === 'pa' && state.mode === 'family') {
-            modeInfo = `<div class="mode-info"><div class="chip-row">${['คู่สมรส','พ่อ','แม่','ลูก','พี่น้อง'].map(r => `<button class="chip ${state.familyRelation===r?'on':''}" onclick="setFamily('${r}')">${r}</button>`).join('')}</div><div class="fam-grid"><input class="txt" placeholder="ชื่อ" value="${(state.famFirst||'').replace(/"/g,'&quot;')}" oninput="state.famFirst=this.value" /><input class="txt" placeholder="นามสกุล" value="${(state.famLast||'').replace(/"/g,'&quot;')}" oninput="state.famLast=this.value" /></div><input class="txt" style="margin-top:8px;" placeholder="เลขบัตรประชาชน 13 หลัก" inputmode="numeric" maxlength="13" value="${state.famId||''}" oninput="this.value=this.value.replace(/[^0-9]/g,'');state.famId=this.value" /></div>`;
+            modeInfo = `<div class="mode-info"><div class="chip-row">${['คู่สมรส','พ่อ','แม่','ลูก','พี่น้อง'].map(r => `<button class="chip ${state.familyRelation===r?'on':''}" onclick="setFamily('${r}')">${r}</button>`).join('')}</div><div class="fam-grid"><input class="txt" placeholder="ชื่อ" value="${(state.famFirst||'').replace(/"/g,'&quot;')}" oninput="state.famFirst=this.value" /><input class="txt" placeholder="นามสกุล" value="${(state.famLast||'').replace(/"/g,'&quot;')}" oninput="state.famLast=this.value" /></div><input class="txt" style="margin-top:8px;" placeholder="เลขบัตรประชาชน 13 หลัก" inputmode="numeric" maxlength="13" value="${state.famId||''}" oninput="this.value=this.value.replace(/[^0-9]/g,'');state.famId=this.value" /><label class="consent-row"><input type="checkbox" ${state.famConsent?'checked':''} onchange="state.famConsent=this.checked" /> <span>ได้รับความยินยอมจากผู้เอาประกันแล้ว และยอมรับ<a target="_blank" rel="noopener" href="${SITE}/page/policy/">นโยบายข้อมูลส่วนบุคคล</a></span></label></div>`;
           }
           const modeTabs = state.category === 'pa' ? `<div class="grid-3">
-            <button class="mode-tab ${state.mode==='self'?'on':''}" onclick="go('pa-plans','self','pa')">ซื้อให้ตัวเอง</button>
-            <button class="mode-tab ${state.mode==='upsell'?'on':''}" onclick="go('pa-plans','upsell','pa')">เพิ่มความคุ้มครอง</button>
-            <button class="mode-tab ${state.mode==='family'?'on':''}" onclick="go('pa-plans','family','pa')">ซื้อให้คนที่คุณรัก</button>
-          </div>${modeInfo}` : '';
+            <button class="mode-tab ${state.mode==='self'?'on':''}" onclick="go('pa-plans','self','pa');document.getElementById('viewport').scrollTop=0">ซื้อให้ตัวเอง</button>
+            <button class="mode-tab ${state.mode==='upsell'?'on':''}" onclick="go('pa-plans','upsell','pa');document.getElementById('viewport').scrollTop=0">เพิ่มความคุ้มครอง</button>
+            <button class="mode-tab ${state.mode==='family'?'on':''}" onclick="go('pa-plans','family','pa');document.getElementById('viewport').scrollTop=0">ซื้อให้คนที่คุณรัก</button>
+          </div>` : '';
           const selPlan = list.find(p => p.id === activeId) || list[0];
           const buyLabel = (state.category === 'pa' && state.mode === 'upsell' ? 'เพิ่มความคุ้มครองเป็น ' : state.category === 'pa' && state.mode === 'family' ? 'ซื้อให้' + state.familyRelation + ' · ' : 'ซื้อ ') + selPlan.name + ' · ฿' + selPlan.price.toLocaleString();
           const bKey = bannerFor(activeId);
           const banner = bKey ? '<img class="prod-banner" src="' + ASSETS[bKey] + '" alt="" />' : '';
-          vp.innerHTML = liffTop + `<div class="content">${catBar}${banner}${modeTabs}${cards}<button class="btn-primary buy-bar" onclick="checkoutCurrent()">${buyLabel}</button></div>`;
+          vp.innerHTML = liffTop + `<div class="content"><div class="plan-top">${catBar}${banner}${modeTabs}</div>${state.category === 'pa' ? modeInfo : ''}<div class="plan-list">${cards}</div><button class="btn-primary buy-bar" onclick="checkoutCurrent()">${buyLabel}</button></div>`;
         } else if (state.screen === 'jpoint') {
           const rewardsHtml = REWARDS.map(r => `
             <div class="reward-card" onclick="askRedeem('${r.id}')">
@@ -534,7 +590,7 @@
             <div class="card">
               <div style="display:flex;justify-content:space-between;"><strong style="color:#D71920;">${p.planName} (${p.cat})</strong><span style="font-size:10px;background:#DCFCE7;color:#15803D;padding:2px 8px;border-radius:99px;font-weight:700;">คุ้มครองอยู่</span></div>
               <div style="font-size:13px;font-weight:700;margin-top:6px;">${p.holder} (${p.relation})</div>
-              <div style="font-size:11px;color:#64748B;" class="num">${p.no} · คุ้มครอง ฿${p.cov}</div>
+              <div style="font-size:11px;color:#64748B;display:flex;justify-content:space-between;align-items:center;" class="num"><span>${p.no} · คุ้มครอง ฿${p.cov}</span><button class="btn-text" style="color:#D71920;padding:2px 0;" onclick="state.claimAsk=true;render()">แจ้งเคลม ›</button></div>
               ${p.cat === 'PA' && p.relation === 'ตนเอง' ? `<div class="grid-2" style="margin-top:10px;"><button class="btn-outline" onclick="go('pa-plans','upsell','pa')">เพิ่มความคุ้มครอง</button><button class="btn-outline" style="color:#991B1B;" onclick="go('pa-plans','family','pa')">ซื้อให้คนที่คุณรัก</button></div>` : ''}
             </div>`).join('');
           vp.innerHTML = liffTop + '<div class="content">' + list + '</div>';
@@ -544,6 +600,10 @@
       const modalRoot = document.getElementById('modal-root');
       if (state.loginAsk) {
         modalRoot.innerHTML = '<div class="modal-backdrop" onclick="state.loginAsk=false;state.pendingAction=null;render()"><div class="modal-box" onclick="event.stopPropagation()" style="text-align:center;"><div class="login-logo">' + LINE_ICON_BIG + '</div><strong style="font-size:16px;">เข้าสู่ระบบด้วย LINE</strong><p style="font-size:12px;color:#475569;line-height:1.6;">' + (state.pendingAction === 'checkout' ? 'เข้าสู่ระบบเพื่อซื้อประกันและรับ J Point ' : state.pendingAction === 'claim' ? 'เข้าสู่ระบบเพื่อเชื่อม J Point และรับฟรี 500 คะแนน ' : '') + 'Jaymart Insurance ขอใช้ข้อมูลจากบัญชี LINE ของคุณ</p><div class="consent"><div>✓ ชื่อที่แสดง</div><div>✓ รูปโปรไฟล์</div></div><button class="btn-line big" onclick="confirmLogin()">' + LINE_ICON_BIG.replace('22', '18').replace('22', '18') + 'อนุญาตและเข้าสู่ระบบ</button><button class="btn-text" onclick="state.loginAsk=false;state.pendingAction=null;render()">ไว้ทีหลัง</button></div></div>';
+        return;
+      }
+      if (state.claimAsk) {
+        modalRoot.innerHTML = '<div class="modal-backdrop" onclick="state.claimAsk=false;render()"><div class="modal-box" onclick="event.stopPropagation()"><strong style="font-size:16px;">แจ้งเคลม</strong><a class="hotline" href="tel:020990555">' + SVC_ICON.claim + '<span><b>โทร 02-099-0555 กด 1</b><small>แจ้งอุบัติเหตุ 24 ชั่วโมง</small></span></a><div style="font-size:12px;color:#64748B;">ดูขั้นตอนและเอกสารเคลมตามประเภทประกัน</div>' + CLAIMS.map(c => '<a class="claim-link" target="_blank" rel="noopener" href="' + SITE + '/page/content-detail/?content=' + c.c + '">' + c.name + '<span>›</span></a>').join('') + '<button class="btn-text" onclick="state.claimAsk=false;render()">ปิด</button></div></div>';
         return;
       }
       if (state.logoutAsk) {
